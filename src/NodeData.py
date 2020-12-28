@@ -1,6 +1,5 @@
 class NodeData:
     """ This abstract class represents a Node (a component of a graph) """
-
     key = 0
     counter = 0
     # Variables declared inside the class definition, but not inside a method are class or static variables
@@ -14,15 +13,14 @@ class NodeData:
     tagB = 0.0
 
     def __init__(self):
-        # body of the constructor
         self.key = self.counter
-        self.counter = self.counter + 1
+        NodeData.counter = NodeData.counter + 1
         """
           Constructor for NodeData. the key is defined by a general counter.
           @return
         """
 
-    def setKey(self, key):  # replaces the constructor NodeData(int key) in previous project
+    def setkey(self, key):  # replaces the constructor NodeData(int key) in previous project
         self.key = key
 
         """
@@ -63,132 +61,123 @@ class NodeData:
         if (p != None):
             self.geoLocation = p
 
-
-"""
-  Allows changing this node's location.
-
-  @param p - new new location  (position) of this node.
- """
+    """
+    Allows changing this node's location.
+    @param p - new new location  (position) of this node.
+    """
 
 
-def getWeight(self):
-    return self.weight
+    def getWeight(self):
+        return self.weight
 
 
-"""
-  Returns the weight associated with this node.
-
-  @return
- """
-
-
-def setWeight(self, w):
-    self.weight = w
+    """
+    Returns the weight associated with this node.
+    @return
+    """
 
 
-"""
-  Allows changing this node's weight.
+    def setWeight(self, w):
+        self.weight = w
 
-  @param w - the new weight
- """
-
-
-def getInfo(self):
-    return self.info
+    """
+    Allows changing this node's weight.
+     @param w - the new weight
+    """
 
 
-"""
-  Returns the remark (meta data) associated with this node.
-
-  @return
- """
+    def getInfo(self):
+        return self.info
 
 
-def setInfo(self, s):
-    self.info = s
+    """
+    Returns the remark (meta data) associated with this node.
+        @return
+    """
 
 
-# the key of the father in this shortest path
-
-"""
-  Allows changing the remark (meta data) associated with this node.
-
-  @param s
- """
+    def setInfo(self, s):
+        self.info = s
 
 
-def getTag(self):
-    return self.tag
+    # the key of the father in this shortest path
+
+    """
+    Allows changing the remark (meta data) associated with this node.
+     @param s
+    """
 
 
-"""
-  Temporal data (aka color: e,g, white, gray, black)
-  which can be used be algorithms
+    def getTag(self):
+        return self.tag
 
-  @return
- """
+    """
+    Temporal data (aka color: e,g, white, gray, black)
+    which can be used be algorithms
+    @return
+    """
 
 
-def setTag(self, t):
-    self.tag = t
+    def setTag(self, t):
+       self.tag = t
 
 
 # distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
 
-"""
-  Allows setting the "tag" value for temporal marking an node - common
-  practice for marking by algorithms.
+    """
+    Allows setting the "tag" value for temporal marking an node - common
+    practice for marking by algorithms.
 
-  @param t - the new value of the tag
- """
-
-
-def getTagB(self):
-    return self.tagB
+    @param t - the new value of the tag
+    """
 
 
-"""
-  Allows getting the "tagB" value for temporal marking an node - common
-  practice for marking by algorithms.
-  @param t - the new value of the tag
- """
+    def getTagB(self):
+       return self.tagB
 
 
-def setTagB(self, t):
-    self.tagB = t
+    """
+    Allows getting the "tagB" value for temporal marking an node - common
+    practice for marking by algorithms.
+    @param t - the new value of the tag
+    """
+
+
+    def setTagB(self, t):
+        self.tagB = t
 
 
 # distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
 
-"""
-  Allows setting the "tagB" value for temporal marking an node - common
-  practice for marking by algorithms.
-  @param t - the new value of the tag
- """
+    """
+    Allows setting the "tagB" value for temporal marking an node - common
+    practice for marking by algorithms.
+    @param t - the new value of the tag
+    """
 
 
-def toString(self):
-    return "NodeDatakey=" + self.key + ''
+    def toString(self):
+        return "NodeDatakey=" + self.key + ''
 
 
-"""
-  Tostring method
- """
+    """
+    Tostring method
+    """
 
 
-def setDub(self, e):
-    self.dub = e
+    def setDub(self, e):
+        self.dub = e
 
 
-"""
-  This functio sets the dub value of this NodeData
- """
+    """
+    This function sets the dub value of this NodeData
+    """
 
 
-def setCounter(self, count):
-    self.counter = count
+    def setCounter(self, count):
+        self.counter = count
 
 
-"""
-  This function sets the conuter of this NodeData.
- """
+    """
+    This function sets the conuter of this NodeData.
+    """
