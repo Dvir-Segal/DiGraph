@@ -1,5 +1,6 @@
 import GraphInterface
 import random
+from src.NodeData import NodeData
 
 class DiGraph(GraphInterface):
     """This class represents a graph."""
@@ -74,6 +75,7 @@ class DiGraph(GraphInterface):
             self._nodes[node_id]["pos"] = (random.uniform(0, 50), random.uniform(0, 50), 0)
         else:
             self._nodes[node_id]["pos"] = pos
+        self._nodes[node_id]["node"] = NodeData()
         return True
 
     """
