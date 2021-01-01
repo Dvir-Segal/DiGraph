@@ -1,15 +1,16 @@
+import self as self
+
+
 class NodeData:
     """ This abstract class represents a Node (a component of a graph) """
     key = 0
     counter = 0
     # Variables declared inside the class definition, but not inside a method are class or static variables
-    geo_location = None
     weight = 0.0
     info = ""
     tag = 0
     parent = None  # nodeData parent. is it necessary?
     visited = "false"
-    dub = 0.0
     tagB = 0.0
 
     def __init__(self):
@@ -17,10 +18,9 @@ class NodeData:
         NodeData.counter = NodeData.counter + 1
         """
           Constructor for NodeData. the key is defined by a general counter.
-          @return
         """
 
-    def setkey(self, key):  # replaces the constructor NodeData(int key) in previous project
+    def setkey(self, key: int):  # replaces the constructor NodeData(int key) in previous project
         self.key = key
 
         """
@@ -30,7 +30,7 @@ class NodeData:
 
     def copyNodeData(self, n):
         self.key = n.getKey()
-        self.geoLocation = n.getLocation()
+        #self.geoLocation = n.getLocation()
         self.weight = n.getWeight()
         self.info = n.getInfo()
         self.tag = n.getTag()
@@ -48,23 +48,7 @@ class NodeData:
       @return
      """
 
-    def returnGeoLocation(self):
-        return self.geoLocation
 
-    """
-      Returns the location of this node, if
-      none return null.   
-      @return
-     """
-
-    def setLocation(self, p):
-        if (p != None):
-            self.geoLocation = p
-
-    """
-    Allows changing this node's location.
-    @param p - new new location  (position) of this node.
-    """
 
 
     def getWeight(self):
@@ -77,7 +61,7 @@ class NodeData:
     """
 
 
-    def setWeight(self, w):
+    def setWeight(self, w: float):
         self.weight = w
 
     """
