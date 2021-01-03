@@ -1,4 +1,4 @@
-import self as self
+# import self as self
 
 
 class NodeData:
@@ -30,7 +30,7 @@ class NodeData:
 
     def copyNodeData(self, n):
         self.key = n.getKey()
-        #self.geoLocation = n.getLocation()
+        # self.geoLocation = n.getLocation()
         self.weight = n.getWeight()
         self.info = n.getInfo()
         self.tag = n.getTag()
@@ -48,18 +48,13 @@ class NodeData:
       @return
      """
 
-
-
-
     def getWeight(self):
         return self.weight
-
 
     """
     Returns the weight associated with this node.
     @return
     """
-
 
     def setWeight(self, w: float):
         self.weight = w
@@ -69,20 +64,16 @@ class NodeData:
      @param w - the new weight
     """
 
-
     def getInfo(self):
         return self.info
-
 
     """
     Returns the remark (meta data) associated with this node.
         @return
     """
 
-
     def setInfo(self, s):
         self.info = s
-
 
     # the key of the father in this shortest path
 
@@ -90,7 +81,6 @@ class NodeData:
     Allows changing the remark (meta data) associated with this node.
      @param s
     """
-
 
     def getTag(self):
         return self.tag
@@ -101,12 +91,10 @@ class NodeData:
     @return
     """
 
-
     def setTag(self, t):
-       self.tag = t
+        self.tag = t
 
-
-# distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
+    # distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
 
     """
     Allows setting the "tag" value for temporal marking an node - common
@@ -115,10 +103,8 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-
     def getTagB(self):
-       return self.tagB
-
+        return self.tagB
 
     """
     Allows getting the "tagB" value for temporal marking an node - common
@@ -126,12 +112,10 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-
     def setTagB(self, t):
         self.tagB = t
 
-
-# distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
+    # distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
 
     """
     Allows setting the "tagB" value for temporal marking an node - common
@@ -139,28 +123,22 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-
     def toString(self):
         return "NodeDatakey=" + self.key + ''
-
 
     """
     Tostring method
     """
 
-
     def setDub(self, e):
         self.dub = e
-
 
     """
     This function sets the dub value of this NodeData
     """
 
-
     def setCounter(self, count):
         self.counter = count
-
 
     """
     This function sets the conuter of this NodeData.

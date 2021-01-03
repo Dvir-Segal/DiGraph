@@ -113,7 +113,7 @@ class DiGraph(GraphInterface):
         @param node_id: The node ID
         @return: True if the node was removed successfully, False o.w.
         Note: if the node id does not exists the function will do nothing
-        """
+    """
 
 
 
