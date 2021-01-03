@@ -12,6 +12,7 @@ class NodeData:
     parent = None  # nodeData parent. is it necessary?
     visited = "false"
     tagB = 0.0
+    color = ""
 
     def __init__(self):
         self.key = self.counter

@@ -1,8 +1,10 @@
+from encodings import undefined
 from tokenize import Double
 from typing import List, Collection
 from collections import deque
 from src import GraphAlgoInterface, GraphInterface, DiGraph, NodeData
 from src.DiGraph import DiGraph
+from collections import defaultdict
 
 
 class DiGraph(GraphAlgoInterface):
@@ -100,7 +102,7 @@ class DiGraph(GraphAlgoInterface):
                 if (q.contains(neinode)):  # where v has not yet been removed from Q.#if it contains the neighbor node
                     #   if(getGraph().getEdge(edge.getKey(), minKey)!=-1)  should be^^ for
                     dist = minDist + self.myGraph.getEdge(minKey,
-                    neinode.getKey()).getWeight()  # alt := dist[u] + dist_between(u, v) #check
+                                                          neinode.getKey()).getWeight()  # alt = dist[u] + dist_between(u, v) #check
                     if (dist < neinode.getTagB()):
                         (neinode).setTagB(dist)  # it's the path's weight sum, why is it double? #(NodeData)
                         # because it's requested like that. TO GO THROUGH LATER
@@ -129,56 +131,111 @@ class DiGraph(GraphAlgoInterface):
     def shortest_path_dist(self, src, dest):
         if (src == dest):  # the distance from a node to itself is 0.
             return 0
-
         aj = self.shortest_path_a(self, src, dest)  # aj is type List
         if (aj.isEmpty()):
             return -1  # EMPTY aj MEANS THERE'S NO PATH FROM SRC TO DEST
-
         weight = ((NodeData)(aj.get(aj.size() - 1))).getTagB()
+
         return weight  # with -1 cuz of the edges num, if there are 2 nodes, theres only one edge connecting them
         """returns the length of the shortest path between src to dest"""
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
+        return None
 
-        """
-        Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
-        @param id1: The start node id
-        @param id2: The end node id
-        @return: The distance of the path, the path as a list
-        Example:
-#      >>> from GraphAlgo import GraphAlgo
-#       >>> g_algo = GraphAlgo()
-#        >>> g_algo.addNode(0)
-#        >>> g_algo.addNode(1)
-#        >>> g_algo.addNode(2)
-#        >>> g_algo.addEdge(0,1,1)
-#        >>> g_algo.addEdge(1,2,4)
-#        >>> g_algo.shortestPath(0,1)
-#        (1, [0, 1])
-#        >>> g_algo.shortestPath(0,2)
-#        (5, [0, 1, 2])
-        More info:
-        https:#en.wikipedia.org/wiki/Dijkstra's_algorithm
-        """
+    def reverse_graph(self):
+        for nd in self.myGraph.getV():  #Reverse the original graph
+             self.reversedGraph.addNode(nd) #add the nodes to the new graph
+             for edge in self.myGraph.getE(nd.getKey()):
+                 src=edge.getSrc()
+                 dest=edge.getDest()
+                 self.reversedGraph.connect(dest, src, 1)
+                 #1 as a defult weight, as it doesn't matter for this DFS algorithm
+        return self.reversedGraph;
+
+    """
+    https://www.cs.huji.ac.il/course/2005/dast/slides/lect14.pdf
+    https://cs.stackexchange.com/questions/57495/how-do-we-generate-a-depth-first-forest-from-the-depth-first-search
+    SCC algorithm implementation, used pseudocode
+    """
 
     def connected_component(self, id1: int) -> list:
+        #list = self.kosaraju(self, self.myGraph)
+
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
         @param id1: The node id
         @return: The list of nodes in the SCC
         """
 
+    tropoligalSort= [] #have the list in tropoligical sort
+    sccList=[];
+
+    #dfs implementation
+    def dfs(self, G):
+        for vertex in self.myGraph.get_all_v():
+            vertex.color= "white"
+            vertex.parent=None
+        for vertex in self.myGraph.get_all_v():
+            if vertex.color== "white":
+                self.DFSVISIT(vertex)
+
+    """dfs implementation- first part"""
+
+    def DFSVISIT(self, G, vertex):
+        vertex.color="gray"
+        for v in self.myGraph.all_out_edges_of_node():
+            if v.color == "white":
+                v.parent= vertex
+                self.DFSVISIT(self, G, v)
+        vertex.color="black"
+        self.tropoligalSort= vertex+ self.tropoligalSort
+
+    """dfs implementation- second part"""
+
+    def dfsTropologic(self, G):
+        for vertex in self.tropoligalSort:
+            vertex.color= "white"
+            vertex.parent=None
+        for vertex in self.myGraph.get_all_v():
+            if vertex.color== "white":
+                self.DFSVISITTropoligic(vertex)
+
+    """dfs implementation on the tropolical list of nodes- first part"""
+
+
+    def DFSVISITTropoligic(self, G, vertex):
+        scc=[]
+        vertex.color = "gray"
+        for v in self.myGraph.all_out_edges_of_node():
+            if v.color == "white":
+                v.parent = vertex
+                self.DFSVISITTropoligic(self, G, v)
+                scc= v+scc
+        if scc:                       #if the list of components is not empty
+             self.sccList.append(scc)
+        vertex.color = "black"
+        return self.sscList
+
+
+        """dfs implementation on the tropolical list of nodes- second part"""
+
     def connected_components(self) -> List[list]:
+        self.dfs(self, self.myGraph)
+        self.reverse_graph(self, self.myGraph)
+        self.dfsTropologic(self, self.reverse_graph())
+        return self.sccList
+      #  self.kosaraju(self, self.myGraph)
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
 
     def plot_graph(self) -> None:
-
         """
         Plots the graph.
         If the nodes have a position, the nodes will be placed there.
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+
+
