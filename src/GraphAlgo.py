@@ -2,6 +2,7 @@ from tokenize import Double
 from typing import List, Collection
 from collections import deque
 from src import GraphAlgoInterface, GraphInterface, DiGraph, NodeData
+from src.DiGraph import DiGraph
 
 
 class DiGraph(GraphAlgoInterface):
