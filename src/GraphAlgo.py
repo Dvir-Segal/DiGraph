@@ -140,16 +140,18 @@ class DiGraph(GraphAlgoInterface):
         """returns the length of the shortest path between src to dest"""
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        return None
+        list = self.shortest_path_a(id1, id2)
+        dist = self.shortest_path_dist(id1, id2)
+        return dist, list
 
-    def reverse_graph(self):
-        for nd in self.myGraph.getV():  #Reverse the original graph
-             self.reversedGraph.addNode(nd) #add the nodes to the new graph
-             for edge in self.myGraph.getE(nd.getKey()):
-                 src=edge.getSrc()
-                 dest=edge.getDest()
-                 self.reversedGraph.connect(dest, src, 1)
-                 #1 as a defult weight, as it doesn't matter for this DFS algorithm
+    def reverse_graph(self) -> DiGraph:
+        for nd in self.myGraph.getV():  # Reverse the original graph
+            self.reversedGraph.addNode(nd)  # add the nodes to the new graph
+            for edge in self.myGraph.getE(nd.getKey()):
+                src = edge.getSrc()
+                dest = edge.getDest()
+                self.reversedGraph.connect(dest, src, 1)
+                # 1 as a defult weight, as it doesn't matter for this DFS algorithm
         return self.reversedGraph;
 
     """
@@ -159,7 +161,10 @@ class DiGraph(GraphAlgoInterface):
     """
 
     def connected_component(self, id1: int) -> list:
-        #list = self.kosaraju(self, self.myGraph)
+        list = self.connected_components()
+        for l in list:
+            if id1 in list:
+                return list
 
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
@@ -167,55 +172,53 @@ class DiGraph(GraphAlgoInterface):
         @return: The list of nodes in the SCC
         """
 
-    tropoligalSort= [] #have the list in tropoligical sort
-    sccList=[];
+    tropoligalSort = []  # have the list in tropoligical sort
+    sccList = [];
 
-    #dfs implementation
+    # dfs implementation
     def dfs(self, G):
         for vertex in self.myGraph.get_all_v():
-            vertex.color= "white"
-            vertex.parent=None
+            vertex.color = "white"
+            vertex.parent = None
         for vertex in self.myGraph.get_all_v():
-            if vertex.color== "white":
+            if vertex.color == "white":
                 self.DFSVISIT(vertex)
 
     """dfs implementation- first part"""
 
     def DFSVISIT(self, G, vertex):
-        vertex.color="gray"
+        vertex.color = "gray"
         for v in self.myGraph.all_out_edges_of_node():
             if v.color == "white":
-                v.parent= vertex
+                v.parent = vertex
                 self.DFSVISIT(self, G, v)
-        vertex.color="black"
-        self.tropoligalSort= vertex+ self.tropoligalSort
+        vertex.color = "black"
+        self.tropoligalSort = vertex + self.tropoligalSort
 
     """dfs implementation- second part"""
 
     def dfsTropologic(self, G):
         for vertex in self.tropoligalSort:
-            vertex.color= "white"
-            vertex.parent=None
+            vertex.color = "white"
+            vertex.parent = None
         for vertex in self.myGraph.get_all_v():
-            if vertex.color== "white":
+            if vertex.color == "white":
                 self.DFSVISITTropoligic(vertex)
 
     """dfs implementation on the tropolical list of nodes- first part"""
 
-
     def DFSVISITTropoligic(self, G, vertex):
-        scc=[]
+        scc = []
         vertex.color = "gray"
         for v in self.myGraph.all_out_edges_of_node():
             if v.color == "white":
                 v.parent = vertex
                 self.DFSVISITTropoligic(self, G, v)
-                scc= v+scc
-        if scc:                       #if the list of components is not empty
-             self.sccList.append(scc)
+                scc = v + scc
+        if scc:  # if the list of components is not empty
+            self.sccList.append(scc)
         vertex.color = "black"
         return self.sscList
-
 
         """dfs implementation on the tropolical list of nodes- second part"""
 
@@ -224,7 +227,7 @@ class DiGraph(GraphAlgoInterface):
         self.reverse_graph(self, self.myGraph)
         self.dfsTropologic(self, self.reverse_graph())
         return self.sccList
-      #  self.kosaraju(self, self.myGraph)
+        #  self.kosaraju(self, self.myGraph)
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
@@ -237,5 +240,3 @@ class DiGraph(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-
-

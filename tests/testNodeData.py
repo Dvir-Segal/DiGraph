@@ -45,9 +45,13 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual("change1", node1.getInfo())
         print("change the key of node2 to be 3", node2.setkey(3))
         self.assertEqual(3, node2.getKey())
-        print("create copy of node1")
-        node1.copyNodeData(node2)
-        print(node1.getInfo(), " ", node1.getKey())
+        print("copying node1 to copyNode")
+        copyNode = NodeData()
+        copyNode.copyNodeData(node1)
+        print("key of node1 is", node1.getInfo())
+        print("info of node1 is", node1.getInfo())
+        print("key of copyNode is", copyNode.getInfo())
+        print("info of copyNode is", copyNode.getInfo())
 
 
 
