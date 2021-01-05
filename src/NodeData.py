@@ -123,12 +123,19 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-    def toString(self):
-        return "NodeDatakey=" + self.key + ''
+    def __repr__(self):
+        return str(self.key)
 
     """
     Tostring method
     """
+
+    # def toString(self):
+    #     return "NodeDatakey=" + self.key + ''
+    #
+    # """
+    # Tostring method
+    # """
 
     def setDub(self, e):
         self.dub = e
