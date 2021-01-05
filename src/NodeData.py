@@ -1,6 +1,5 @@
 # import self as self
 
-
 class NodeData:
     """ This abstract class represents a Node (a component of a graph) """
     key = 0
@@ -92,10 +91,10 @@ class NodeData:
     @return
     """
 
-    def setTag(self, t):
+    def setTag(self, t: float):
         self.tag = t
 
-    # distance of weight, """"""whats the weight in the shortest path from the src up until this one (to dest)
+    # distance of weight, the weight in the shortest path from the src up until this one (to dest)
 
     """
     Allows setting the "tag" value for temporal marking an node - common
@@ -124,8 +123,8 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-    def toString(self):
-        return "NodeDatakey=" + self.key + ''
+    def __repr__(self):
+        return str(self.key)
 
     """
     Tostring method
