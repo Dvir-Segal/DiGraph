@@ -4,6 +4,7 @@ from src.NodeData import NodeData
 from src.GraphInterface import GraphInterface
 
 
+
 class DiGraph(GraphInterface):
     """This class represents a graph."""
     global _nodes
@@ -140,6 +141,7 @@ class DiGraph(GraphInterface):
         @return: True if the node was removed successfully, False o.w.
         Note: if the node id does not exists the function will do nothing
     """
+
 
     def __repr__(self):
         rep_graph = {"Edges": self._edges, "Nodes": self._nodes}
