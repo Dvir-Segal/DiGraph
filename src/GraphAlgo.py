@@ -4,14 +4,19 @@ from typing import List, Collection
 from collections import deque
 from src import GraphAlgoInterface, GraphInterface, DiGraph, NodeData
 from src.DiGraph import DiGraph
+from src.GraphAlgoInterface import GraphAlgoInterface
 from collections import defaultdict
+import copy
 
 
-class DiGraph(GraphAlgoInterface):
+class GraphAlgo(GraphAlgoInterface):
     """This abstract class represents an interface of a graph."""
     __myGraph = None
 
-    def __init__(self, graph: DiGraph):
+    def __init__(self):  # , graph: DiGraph):  # self.myGraph = graph
+        self.__myGraph= DiGraph()
+
+    def __init__(self, graph: DiGraph):  # , graph: DiGraph):
         self.myGraph = graph
         """Init the graph on which this set of algorithms operates on."""
 
@@ -40,14 +45,16 @@ class DiGraph(GraphAlgoInterface):
         """
 
     def shortest_path_a(self, src, dest):
-        c = self.get_graph().getV()  # get and store the graphs' collection of vertices.
+        groupNodes = self.myGraph.nodes  # get and store the graphs' collection of vertices.
+        #groupNodes = copy.deepcopy(self.myGraph.nodes)  # maybe use deepCopy
         parents = {}  # for (space I guess.. wanted to achieve time) complexity reason-
         # a hashmap of parents, to restore the parent of each node in the shortest path
         myListg = []  # create a list for returning the shortest path.
-        list = self.myGraph.getNode  # put the nodes in an arraylist.
-        groupNodes = {}  # create a new nodes hashmap for the actions required.
-        for i in list:  # i type: NodeData
-            groupNodes.put(i.getKey(), i)  # for every key in the nodes list put it in the hashmap with its key.
+        # list = self.myGraph.getNode  # put the nodes in an arraylist.
+        # groupNodes = {}  # create a new nodes hashmap for the actions required.
+        # list= listy.values()
+        # for i in list:  # i type: NodeData
+        #     groupNodes[i.getKey()] = i  # for every key in the nodes list put it in the hashmap with its key.
 
         desty = dest  # for further use
 
@@ -61,23 +68,37 @@ class DiGraph(GraphAlgoInterface):
             #         System.out.println("someone doesnt exist")
             return myListg
 
-        for key in groupNodes.keys:  # initializing- prepearing the nodes for the proccess.
-            groupNodes.get(key).setInfo("")  # previous node, that from it we got to this node,
+        groupNodesKeys = groupNodes.keys()
+        for key in groupNodesKeys:  # initializing- prepearing the nodes for the proccess.
+            print("key is", key)
+            # print("type is ", self.myGraph.get_all_v().get(0))
+
+            # {0: {@343534536}}
+            print("ze", self.myGraph.get_all_v())
+            # self.myGraph.get_all_v().get(0).setInfo("")
+            print("type is ", type(self.myGraph._nodes.get(key)))
+            print("type is ", type(self.myGraph._nodes.get(key).getInfo()))
+            print("setting pos", self.myGraph._nodes.get(key).pos)
+            print("setting info", self.myGraph._nodes.get(key).setInfo("lala"))
+            print("getting info", self.myGraph._nodes.get(key).getInfo())
+            # get_node(key).setInfo("")  # previous node, that from it we got to this node,
+            print("nana")
             # in the shortest path: is an empty string because we didn't start the paving yet
-            (groupNodes.get(key)).setTagB(Double.POSITIVE_INFINITY)
+            (groupNodes.get(key)).setTagB(float('inf'))
             # Shortest distance- we set it to infinity cuz we didn't check it yet
-            parents.put(key, None)  # None because initially, we don't have any path to reach
+            parents[key] = None  # None because initially, we don't have any path to reach
 
         (groupNodes.get(src)).setTagB(0)
         # distance a node to itelf is 0, and it's the distance of src from itself
 
         q = deque()  # deque
-        for key in groupNodes.keys:
+        groupNodesKeys = groupNodes.keys()
+        for key in groupNodesKeys:
             # all nodes in the graph are unoptimized - thus are in Q
             # key is Integer
-            q.add(groupNodes.get(key))
+            q.append(groupNodes.get(key))
 
-        minDist = Double.POSITIVE_INFINITY  # double
+        minDist = float('inf')  # double
         minKey = -1  # int
         dist = 0  # double
         minNode = None  # node_data
@@ -86,29 +107,33 @@ class DiGraph(GraphAlgoInterface):
             for node in q:  # getting the smallest dist node
                 # node is type NodeData
                 # System.out.println("key is"+node.getKey())
-                if (((NodeData)(node)).getTagB() <= minDist):
-                    minDist = ((NodeData)(node)).getTagB()
+                if node.getTagB() <= minDist:
+                    minDist = node.getTagB()
                     minKey = node.getKey()
                     minNode = node
 
             q.remove(minNode)
             # for every neighbor of minKey= neinode
-            for edge in self.myGraph.getE(minKey):  # where v has not yet been removed from Q.
+            for key in self.myGraph.all_out_edges_of_node(minKey).keys():  # where v has not yet been removed from Q.
                 # edge is type edge_data
                 # get node data from edge_data
-                neinode = self.myGraph.getNode(edge.getDest())  # (NodeData) #typed NodeData
+                neinode = self.myGraph.nodes.get(key)  # (NodeData) #typed NodeData
                 # we're taking a node from myGraph, which is the neighbor of MINKEY node,
                 # which is the DEST in the edge between MINKEY and DEST.
-                if (q.contains(neinode)):  # where v has not yet been removed from Q.#if it contains the neighbor node
+                if (neinode in q):  # where v has not yet been removed from Q.#if it contains the neighbor node
                     #   if(getGraph().getEdge(edge.getKey(), minKey)!=-1)  should be^^ for
-                    dist = minDist + self.myGraph.getEdge(minKey,
-                                                          neinode.getKey()).getWeight()  # alt = dist[u] + dist_between(u, v) #check
+                    print("nnn", self.myGraph.all_out_edges_of_node(minKey))
+                    print("lll", neinode)
+                    print(type(neinode))
+                    print("pupu", self.myGraph.all_out_edges_of_node(minKey).get(key))
+                    dist = minDist + self.myGraph.all_out_edges_of_node(minKey).get(key)
+                    # getEdge(minKey, neinode.getKey()).getWeight()  # alt = dist[u] + dist_between(u, v) #check
                     if (dist < neinode.getTagB()):
                         (neinode).setTagB(dist)  # it's the path's weight sum, why is it double? #(NodeData)
                         # because it's requested like that. TO GO THROUGH LATER
                         neinode.setInfo(str(minKey))
 
-            minDist = Double.POSITIVE_INFINITY
+            minDist = float('inf')
         # done with while loop.
         desty = dest
 
@@ -116,12 +141,12 @@ class DiGraph(GraphAlgoInterface):
             # typed NodeData
             # means you haven't yet reached the src because only the src has tag=0 (dist)
             # of 0 from itself.
-            myListg.add(groupNodes.get(desty))
+            myListg.append(groupNodes.get(desty))
             desty = int(groupNodes.get(desty).getInfo())  # get the "father"
 
-        myListg.add(groupNodes.get(src))
+        myListg.append(groupNodes.get(src))
         myListg.reverse()  # reverse the list, 'cuz it came reversed, as we got from the dest to src by parents.
-        if (myListg.get(myListg.size() - 1).getKey() != dest):
+        if myListg[len(myListg) - 1].getKey() != dest:
             myListg.clear()
 
         return myListg
@@ -131,18 +156,18 @@ class DiGraph(GraphAlgoInterface):
     def shortest_path_dist(self, src, dest):
         if (src == dest):  # the distance from a node to itself is 0.
             return 0
-        aj = self.shortest_path_a(self, src, dest)  # aj is type List
-        if (aj.isEmpty()):
+        aj = self.shortest_path_a(src, dest)  # aj is type List
+        if not (aj):
             return -1  # EMPTY aj MEANS THERE'S NO PATH FROM SRC TO DEST
-        weight = ((NodeData)(aj.get(aj.size() - 1))).getTagB()
 
+        weight = (aj.pop(len(aj) - 1)).getTagB()
         return weight  # with -1 cuz of the edges num, if there are 2 nodes, theres only one edge connecting them
         """returns the length of the shortest path between src to dest"""
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        list = self.shortest_path_a(id1, id2)
+        nodesList = self.shortest_path_a(id1, id2)
         dist = self.shortest_path_dist(id1, id2)
-        return dist, list
+        return dist, nodesList
 
     def reverse_graph(self) -> DiGraph:
         for nd in self.myGraph.getV():  # Reverse the original graph
@@ -152,7 +177,7 @@ class DiGraph(GraphAlgoInterface):
                 dest = edge.getDest()
                 self.reversedGraph.connect(dest, src, 1)
                 # 1 as a defult weight, as it doesn't matter for this DFS algorithm
-        return self.reversedGraph;
+        return self.reversedGraph
 
     """
     https://www.cs.huji.ac.il/course/2005/dast/slides/lect14.pdf
