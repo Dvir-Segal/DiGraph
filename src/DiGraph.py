@@ -76,6 +76,8 @@ class DiGraph(GraphInterface):
             if id2 in self._edges.get(id1):
                 return False
             self._edges.get(id1).update({id2: weight})
+            self._mc += 1
+            return True
         else:
             self._edges[id1] = {id2: weight}
             self._mc += 1
@@ -103,7 +105,6 @@ class DiGraph(GraphInterface):
             n.pos = tupp
         else:
             n.pos = pos
-            # node_dict["pos"] = pos
         self._nodes[node_id] = n
         self._mc += 1
         return True
@@ -116,9 +117,9 @@ class DiGraph(GraphInterface):
         Note: if the node id already exists the node will not be added"""
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
-        if node_id1 not in self._nodes or node_id2 not in self._nodes:
+        if node_id1 not in self._nodes.keys() or node_id2 not in self._nodes.keys():
             return False
-        if node_id1 not in self._edges or node_id2 not in self._edges[node_id1]:
+        if node_id1 not in self._edges or node_id2 not in self._edges.get(node_id1):
             return False
         del(self._edges[node_id1][node_id2])
         self._mc += 1
@@ -133,14 +134,19 @@ class DiGraph(GraphInterface):
         """
 
     def remove_node(self, node_id: int) -> bool:
-        if node_id not in self._nodes:
+        if node_id not in self._nodes.keys():
             return False
-        self._mc += len(self._edges[node_id])
-        del(self._edges[node_id])
+        if node_id in self._edges.keys():
+            self._mc += len(self._edges[node_id])
+            del(self._edges[node_id])
+        delete = []
         for src in self._edges.keys():
-            del(self._edges[src][node_id])
+            if node_id in self._edges.get(src).keys():
+                delete.append(src)
+        for src in delete:
+            del self._edges[src][node_id]
             self._mc += 1
-        del (self._nodes[node_id])
+        del(self._nodes[node_id])
         self._mc += 1
         return True
 
@@ -155,3 +161,5 @@ class DiGraph(GraphInterface):
     def __repr__(self):
         rep_graph = {"Edges": self._edges, "Nodes": self._nodes}
         return str(rep_graph)
+
+    """ ToString methode """
