@@ -1,4 +1,4 @@
-import GraphInterface
+
 import random
 from src.NodeData import NodeData
 from src.GraphInterface import GraphInterface
@@ -21,16 +21,17 @@ class DiGraph(GraphInterface):
         Constructor
         """
 
-    def v_size(self):
+    def v_size(self) -> int:
         return len(self._nodes)
-
     """
          Returns the number of vertices in this graph
          @return: The number of vertices in this graph
          """
 
     def e_size(self) -> int:
-        return len(self._edges)
+        for i in self._edges.keys():
+            self._counter_edge += len(self._edges.get(i))
+        return self._counter_edge
 
     """
              Returns the number of edges in this graph
@@ -77,6 +78,7 @@ class DiGraph(GraphInterface):
             self._edges.get(id1).update({id2: weight})
         else:
             self._edges[id1] = {id2: weight}
+            self._mc += 1
             return True
     """
         Adds an edge to the graph.
@@ -91,16 +93,19 @@ class DiGraph(GraphInterface):
         if node_id in self._nodes.keys():
             return False
         for i in self._nodes.keys():
-            if self._nodes.get(i).get("pos") == pos:
+            if self._nodes.get(i).pos == pos:
                 return False
-        node_dict = {"node":NodeData()}
+        n = NodeData()
+        # node_dict = {"node":NodeData()}
         if pos is None:
             x, y = random.uniform(0, 50), random.uniform(0, 50)
             tupp = (x, y, 0)
-            node_dict["pos"] = tupp
+            n.pos = tupp
         else:
-            node_dict["pos"] = pos
-        self._nodes[node_id] = node_dict
+            n.pos = pos
+            # node_dict["pos"] = pos
+        self._nodes[node_id] = n
+        self._mc += 1
         return True
 
     """
@@ -115,7 +120,8 @@ class DiGraph(GraphInterface):
             return False
         if node_id1 not in self._edges or node_id2 not in self._edges[node_id1]:
             return False
-        del (self._edges[node_id1][node_id2])
+        del(self._edges[node_id1][node_id2])
+        self._mc += 1
         return True
 
     """
@@ -129,10 +135,13 @@ class DiGraph(GraphInterface):
     def remove_node(self, node_id: int) -> bool:
         if node_id not in self._nodes:
             return False
-        del (self._edges[node_id])
-        for src in self._edges:
-            del (self._edges[src][node_id])
+        self._mc += len(self._edges[node_id])
+        del(self._edges[node_id])
+        for src in self._edges.keys():
+            del(self._edges[src][node_id])
+            self._mc += 1
         del (self._nodes[node_id])
+        self._mc += 1
         return True
 
     """

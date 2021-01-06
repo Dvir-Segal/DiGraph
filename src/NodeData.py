@@ -12,6 +12,7 @@ class NodeData:
     visited = "false"
     tagB = 0.0
     color = ""
+    pos = ()
 
     def __init__(self):
         self.key = self.counter
@@ -124,7 +125,7 @@ class NodeData:
     """
 
     def __repr__(self):
-        return str(self.key)
+        return str(self.key) + ", " + str(self.pos)
 
     """
     Tostring method
