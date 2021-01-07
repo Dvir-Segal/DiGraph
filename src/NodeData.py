@@ -12,7 +12,7 @@ class NodeData:
     visited = "false"
     tagB = 0.0
     color = ""
-    pos = ()
+    pos= ()
 
     def __init__(self):
         self.key = self.counter
@@ -20,6 +20,13 @@ class NodeData:
         """
           Constructor for NodeData. the key is defined by a general counter.
         """
+
+    def __repr__(self):
+        return str(self.key) + ", " + str(self.pos)
+    """
+    Tostring method
+    """
+
 
     def setkey(self, key: int):  # replaces the constructor NodeData(int key) in previous project
         self.key = key
@@ -124,12 +131,7 @@ class NodeData:
     @param t - the new value of the tag
     """
 
-    def __repr__(self):
-        return str(self.key) + ", " + str(self.pos)
 
-    """
-    Tostring method
-    """
 
     # def toString(self):
     #     return "NodeDatakey=" + self.key + ''

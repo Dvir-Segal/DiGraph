@@ -98,6 +98,7 @@ class DiGraph(GraphInterface):
             if self._nodes.get(i).pos == pos:
                 return False
         n = NodeData()
+        n.setkey(node_id) #to make sure the added node has the same key as we want it to have
         # node_dict = {"node":NodeData()}
         if pos is None:
             x, y = random.uniform(0, 50), random.uniform(0, 50)
