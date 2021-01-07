@@ -177,15 +177,19 @@ class DiGraph(GraphInterface):
         return our_graph
     """ The methode arranges the graph, by our demand (as json format) """
 
-    def compare(self, other) -> bool:
-        if not isinstance(self, other):
+    def set_mc(self):
+        self._mc = 0
+    """Initialization the number of changes"""
+
+    def __eq__(self, other) -> bool:
+        if (not isinstance(other, DiGraph)):
             return False
         if self.v_size()!=other.v_size() or self.v_size()!=other.v_size():
             return False
         for k in self._nodes.keys():
             if k not in other._nodes.keys():
                 return False
-            if self._nodes.get(k).pos != other._nodes.get(k).pos:
+            if self.as_dict().get("Nodes")[k].get("pos") == other.as_dict().get("Nodes")[k].get("pos"):
                 return False
         if len(self._edges) != len(other._edges):
             return False
