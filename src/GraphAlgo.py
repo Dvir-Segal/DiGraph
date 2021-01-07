@@ -1,5 +1,6 @@
 from encodings import undefined
 from tokenize import Double
+import json
 from typing import List, Collection
 from collections import deque
 from src import GraphAlgoInterface, GraphInterface, DiGraph, NodeData
@@ -31,6 +32,17 @@ class GraphAlgo(GraphAlgoInterface):
         """
 
     def load_from_json(self, file_name: str) -> bool:
+        try:
+            with open(file_name, "r") as file:
+                data = json.load(file)
+            self.__init__()
+            for n in data.get("Nodes"):
+                self.__myGraph.add_node(n.get("id"), n.get("pos"))
+            for e in data.get("Edges"):
+                self.__myGraph.add_edge(e.get("src"), e.get("dest"), e.get("w"))
+            return True
+        except Exception as e:
+            return False
         """
         Loads a graph from a json file.
         @param file_name: The path to the json file
@@ -38,6 +50,12 @@ class GraphAlgo(GraphAlgoInterface):
         """
 
     def save_to_json(self, file_name: str) -> bool:
+        try:
+            with open(file_name, "w") as file:
+                json.dump(self.__myGraph.as_dict(),indent=4, fp=file)
+            return True
+        except Exception as e:
+            return False
         """
         Saves the graph in JSON format to a file
         @param file_name: The path to the out file
