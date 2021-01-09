@@ -105,7 +105,10 @@ class DiGraph(GraphInterface):
             tupp = (x, y, 0)
             n.pos = tupp
         else:
-            n.pos = pos
+            if type(pos) is str:
+                n.pos = eval(pos)
+            else:
+                n.pos = pos
         self._nodes[node_id] = n
         self._mc += 1
         return True
