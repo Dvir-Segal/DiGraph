@@ -193,7 +193,7 @@ class DiGraph(GraphInterface):
         for k in self._nodes.keys():
             if k not in other._nodes.keys():
                 return False
-            if self.as_dict().get("Nodes")[k].get("pos") == other.as_dict().get("Nodes")[k].get("pos"):
+            if self.as_dict().get("Nodes")[k].get("pos") == eval(other.as_dict().get("Nodes")[k].get("pos")):
                 return False
         if len(self._edges) != len(other._edges):
             return False
