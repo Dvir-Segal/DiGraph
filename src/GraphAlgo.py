@@ -255,12 +255,10 @@ class GraphAlgo(GraphAlgoInterface):
         fig, axes = plt.subplots(figsize=(8, 6))
         csfont = {'fontname': 'Comic Sans MS'}
         axes.set_title("Graph Plot", **csfont, fontsize=25)
-        fig.patch.set_facecolor('xkcd:lavender')
-        axes.set_facecolor('xkcd:lightblue')
+
         for node in self.myGraph._nodes.values():
-            circle = plt.Circle((node.pos[0], node.pos[1]), radius=1, facecolor='magenta', edgecolor='purple')
-            axes.add_patch(circle)
-            label = axes.annotate(str(node.key), xy=(node.pos[0], node.pos[1]), fontsize=10, ha="center")
+            plt.scatter(node.pos[0], node.pos[1], s=25, color="red")
+            plt.text(node.pos[0], node.pos[1] + 0.0001, str(node.key), color="green", fontsize=8)
 
         for src in self.myGraph._edges.keys():
             for dest in self.myGraph._edges.get(src).keys():
@@ -269,23 +267,25 @@ class GraphAlgo(GraphAlgoInterface):
                 x2 = self.myGraph._nodes.get(dest).pos[0]
                 y2 = self.myGraph._nodes.get(dest).pos[1]
 
-                if (self.myGraph._edges.get(dest)):  #if there's a chance for a two directional edge..
+                if (self.myGraph._edges.get(dest)):  # if there's a chance for a two directional edge..
                     if (self.myGraph._edges.get(dest).get(src)):  # if there's a two- directional edge
                         srcNode = self.myGraph._nodes.get(src)
                         destNode = self.myGraph._nodes.get(dest)
                         plt.annotate("", xy=(destNode.pos[0], destNode.pos[1]), xytext=(srcNode.pos[0], srcNode.pos[1]),
-                                     arrowprops=dict(arrowstyle='<->'), horizontalalignment="center", color='b')
+                                     arrowprops=dict(arrowstyle='<->', color='black'))
                     else:
-                         # there's only a one directed edge
-                        plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
-                else:         # there's only a one directed edge
-                    plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
-        white_patch = mpatches.Patch(color='white', label='(one)Directed edge')
+                        #There's only a one directed edge
+                        plt.annotate("", xy=(x1, y1), xytext=(x2, y2),
+                                     arrowprops=dict(arrowstyle='->'), color='blue')
+                else:  # there's only a one directed edge
+                    plt.annotate("", xy= (x1, y1), xytext=(x2, y2), arrowprops=dict(arrowstyle='->', color='blue'))
+
+        white_patch = mpatches.Patch(color='blue', label='(one)Directed edge')
         black_patch = mpatches.Patch(color='black', label='Bidirected edge')
-        magenta_patch = mpatches.Patch(color='magenta', label='Node')
+        magenta_patch = mpatches.Patch(color='red', label='Node')
         plt.legend(handles=[black_patch, white_patch, magenta_patch])
-        axes.relim()
-        axes.autoscale_view()
+        # axes.relim()
+        # axes.autoscale_view()
         plt.show()
         """
         Plots the graph.
