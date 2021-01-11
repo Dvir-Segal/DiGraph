@@ -28,7 +28,7 @@ class GraphAlgo(GraphAlgoInterface):
     sccList = []
 
     def __init__(self, graph=myGraph):  # , graph: DiGraph):
-        self.myGraph= DiGraph()
+        self.myGraph = DiGraph()
         self.myGraph = graph
         self.tropologicalSort = []  # have the list in tropoligical sort
         self.sccList = [];
@@ -49,7 +49,7 @@ class GraphAlgo(GraphAlgoInterface):
             with open(file_name, "r") as file:
                 data = json.load(file)
             self.__init__()
-            self.myGraph= DiGraph()
+            self.myGraph = DiGraph()
             for n in data.get("Nodes"):
                 self.myGraph.add_node(n.get("id"), n.get("pos"))
             for e in data.get("Edges"):
@@ -149,7 +149,6 @@ class GraphAlgo(GraphAlgoInterface):
             # myListg.append(groupNodes.get(desty))
             myListg.append(groupNodes.get(desty))
             desty = int(groupNodes.get(desty).getInfo())  # get the "father"
-
         # myListg.append(groupNodes.get(src)) <<list of nodes
         myListg.append(groupNodes.get(src))  # list of nodes id
         myListg.reverse()  # reverse the list, 'cuz it came reversed, as we got from the dest to src by parents.
@@ -201,7 +200,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
 
     def connected_components(self) -> List[list]:
-        if self.get_graph() is None or self.get_graph().v_size()==0:
+        if self.get_graph() is None or self.get_graph().v_size() == 0:
             return []
         all_the_SCC = []
         has_family = {}
@@ -252,20 +251,12 @@ class GraphAlgo(GraphAlgoInterface):
     """BFS algorithm: this method operates BFS twice: one for the original graph, and the
     second time for reverse graph. After this time we get SCC for specific node"""
 
-
     def plot_graph(self) -> None:
-        # plot figure
-        # maxy =max(self.myGraph._nodes, key=int)
-        # miny =min(self.myGraph._nodes, key=int)
         fig, axes = plt.subplots(figsize=(8, 6))
-        # naming stuff
         csfont = {'fontname': 'Comic Sans MS'}
         axes.set_title("Graph Plot", **csfont, fontsize=25)
-        # plt.xlim([-20, 60])
-        # plt.ylim([-20, 80])
         fig.patch.set_facecolor('xkcd:lavender')
         axes.set_facecolor('xkcd:lightblue')
-
         for node in self.myGraph._nodes.values():
             circle = plt.Circle((node.pos[0], node.pos[1]), radius=1, facecolor='magenta', edgecolor='purple')
             axes.add_patch(circle)
@@ -277,21 +268,23 @@ class GraphAlgo(GraphAlgoInterface):
                 y1 = self.myGraph._nodes.get(src).pos[1]
                 x2 = self.myGraph._nodes.get(dest).pos[0]
                 y2 = self.myGraph._nodes.get(dest).pos[1]
-                # print("srcNode is: ",src,"x1,y1: ", x1, y1, "srcDest is: ",dest, "x2,y2: ",x2, y2)
-                if (self.myGraph._edges.get(dest).get(src)):  # if there's a two- directional edge
-                    srcNode = self.myGraph._nodes.get(src)
-                    destNode = self.myGraph._nodes.get(dest)
-                    # str(self.myGraph._edges.get(dest).get(src)) #-down
-                    plt.annotate("", xy=(destNode.pos[0], destNode.pos[1]), xytext=(srcNode.pos[0], srcNode.pos[1]),
-                                 arrowprops=dict(arrowstyle='<->'), horizontalalignment="center", color='b')
-                else:
+
+                if (self.myGraph._edges.get(dest)):  #if there's a chance for a two directional edge..
+                    if (self.myGraph._edges.get(dest).get(src)):  # if there's a two- directional edge
+                        srcNode = self.myGraph._nodes.get(src)
+                        destNode = self.myGraph._nodes.get(dest)
+                        plt.annotate("", xy=(destNode.pos[0], destNode.pos[1]), xytext=(srcNode.pos[0], srcNode.pos[1]),
+                                     arrowprops=dict(arrowstyle='<->'), horizontalalignment="center", color='b')
+                    else:
+                         # there's only a one directed edge
+                        plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
+                else:         # there's only a one directed edge
                     plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
         white_patch = mpatches.Patch(color='white', label='(one)Directed edge')
         black_patch = mpatches.Patch(color='black', label='Bidirected edge')
         magenta_patch = mpatches.Patch(color='magenta', label='Node')
         plt.legend(handles=[black_patch, white_patch, magenta_patch])
         axes.relim()
-        # update ax.viewLim using the new dataLim
         axes.autoscale_view()
         plt.show()
         """
