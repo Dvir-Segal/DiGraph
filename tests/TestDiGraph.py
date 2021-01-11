@@ -31,6 +31,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(15, self.graph.v_size())
         self.assertEqual(9, self.graph.e_size())
         self.assertEqual(24, self.graph.get_mc())
+
     """
     The central graph contains 15 nodes and 9 edges. Total: 24 ganges. With those data we know to track the changes in the graph
     """
@@ -39,7 +40,7 @@ class MyTestCase(unittest.TestCase):
         print("all the dests of node 3: " + str(self.graph.all_out_edges_of_node(3)))
         print("all the srcs of node 2: " + str(self.graph.all_in_edges_of_node(2)))
         print()
-        self.graph.remove_edge(3,2)
+        self.graph.remove_edge(3, 2)
         self.graph.remove_edge(3, 2)
         self.graph.remove_edge(3, 10)
         self.graph.remove_edge(2, 7)
@@ -64,7 +65,7 @@ class MyTestCase(unittest.TestCase):
         5. remove 2-->11 - the edge doesn't exist, false
         6. remove 11-->2 - true
         7. remove 21-->5 - node 21 doesn't exist, false
-        
+
         Now, the graph contains only 6 edges, and it was change more 2 times, total: 27 changes"""
 
     def test_removeNode(self):
@@ -94,7 +95,6 @@ class MyTestCase(unittest.TestCase):
         5. remove node 4 - true. By the way, we remove 4-->9 (2 changes)
 
         Now, the graph contains only 6 edges, 11 nodes and it was change more 7 times, total: 31 changes"""
-
 
 
 if __name__ == '__main__':

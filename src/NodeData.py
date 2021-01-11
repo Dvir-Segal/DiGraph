@@ -12,6 +12,7 @@ class NodeData:
     visited = "false"
     tagB = 0.0
     color = ""
+    time = 0
     pos= ()
 
     def __init__(self):

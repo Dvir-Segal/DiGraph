@@ -11,12 +11,14 @@ class DiGraph(GraphInterface):
     global _edges
     global _counter_edge
     global _mc
+    global _reverse_edges
 
     def __init__(self):
         self._nodes = {}
         self._edges = {}
         self._counter_edge = 0
         self._mc = 0
+        self._reverse_edges = {}
         """
         Constructor
         """
@@ -50,12 +52,7 @@ class DiGraph(GraphInterface):
         weight)"""
 
     def all_in_edges_of_node(self, id1: int) -> dict:
-        in_edges = {}
-        for src in self._edges:
-            for dest in self._edges[src]:
-                if dest == id1:
-                    in_edges[src] = self._edges.get(src).get(dest)
-        return in_edges
+        return self._reverse_edges.get(id1)
 
     """return a dictionary of all the nodes connected to (into) node_id ,
         each node is represented using a pair (key, weight)"""
@@ -76,10 +73,18 @@ class DiGraph(GraphInterface):
             if id2 in self._edges.get(id1):
                 return False
             self._edges.get(id1).update({id2: weight})
+            if id2 in self._reverse_edges.keys():
+                self._reverse_edges.get(id2).update({id1: weight})
+            else:
+                self._reverse_edges[id2] = {id1: weight}
             self._mc += 1
             return True
         else:
             self._edges[id1] = {id2: weight}
+            if id2 in self._reverse_edges.keys():
+                self._reverse_edges.get(id2).update({id1: weight})
+            else:
+                self._reverse_edges[id2] = {id1: weight}
             self._mc += 1
             return True
     """
@@ -126,6 +131,7 @@ class DiGraph(GraphInterface):
         if node_id1 not in self._edges or node_id2 not in self._edges.get(node_id1):
             return False
         del(self._edges[node_id1][node_id2])
+        del(self._reverse_edges[node_id2][node_id1])
         self._mc += 1
         return True
 
@@ -150,6 +156,12 @@ class DiGraph(GraphInterface):
         for src in delete:
             del self._edges[src][node_id]
             self._mc += 1
+        delete.clear()
+        for dest in self._reverse_edges.keys():
+            if node_id in self._reverse_edges.get(dest).keys():
+                delete.append(dest)
+        for dest in delete:
+            del self._reverse_edges[dest][node_id]
         del(self._nodes[node_id])
         self._mc += 1
         return True

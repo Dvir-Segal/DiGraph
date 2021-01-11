@@ -9,7 +9,7 @@ from src.NodeData import NodeData
 class MyTestCase(unittest.TestCase):
 
     def setUp(self): #initalizes the nodes counter before each test to be 0.
-        NodeData.counter = 0;
+        NodeData.counter = 0
 
     def test_creatingNewNodeAndGetKey(self):
         """
