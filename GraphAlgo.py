@@ -1,3 +1,7 @@
+from encodings import undefined
+from tokenize import Double
+import numpy as np
+import matplotlib.pyplot as plt
 import json
 from typing import List, Collection
 from collections import deque
@@ -5,6 +9,15 @@ from src import GraphAlgoInterface, GraphInterface, DiGraph, NodeData
 from src.DiGraph import DiGraph
 from src.GraphAlgoInterface import GraphAlgoInterface
 from collections import defaultdict
+from matplotlib.ticker import AutoLocator
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import matplotlib.patches as mpatches
+import matplotlib
+import numpy as np
+import math
+from math import e
+from math import pi
 import copy
 
 
@@ -14,17 +27,14 @@ class GraphAlgo(GraphAlgoInterface):
     tropologicalSort = []
     sccList = []
 
-    # def __init__(self):  # , graph: DiGraph):  # self.myGraph = graph
-    #     self.__myGraph= DiGraph()
-
     def __init__(self, graph=myGraph):  # , graph: DiGraph):
-        # self.reversedGraph = DiGraph()
+        self.myGraph = DiGraph()
         self.myGraph = graph
         self.tropologicalSort = []  # have the list in tropoligical sort
         self.sccList = [];
         """Init the graph on which this set of algorithms operates on."""
 
-    def get_graph(self) -> GraphInterface:
+    def get_graph(self) -> DiGraph:
         return self.myGraph
 
     def get_graph_in_class(self) -> DiGraph:
@@ -36,9 +46,10 @@ class GraphAlgo(GraphAlgoInterface):
 
     def load_from_json(self, file_name: str) -> bool:
         try:
-            with open(file_name + ".json", "r") as file:
+            with open(file_name, "r") as file:
                 data = json.load(file)
             self.__init__()
+            self.myGraph = DiGraph()
             for n in data.get("Nodes"):
                 self.myGraph.add_node(n.get("id"), n.get("pos"))
             for e in data.get("Edges"):
@@ -53,43 +64,38 @@ class GraphAlgo(GraphAlgoInterface):
         """
 
     def save_to_json(self, file_name: str) -> bool:
-        if file_name:
-            try:
-                with open(file_name + ".json", "w") as file:
-                    json.dump(self.myGraph.as_dict(), indent=4, fp=file)
-                return True
-            except Exception as e:
-                return False
-            else:
-                return False
+        try:
+            with open(file_name, "w") as file:
+                json.dump(self.myGraph.as_dict(), indent=4, fp=file)
+            return True
+        except Exception as e:
+            return False
+        """
+        Saves the graph in JSON format to a file
+        @param file_name: The path to the out file
+        @return: True if the save was successful, Flase o.w.
+        """
 
-    """
-    Saves the graph in JSON format to a file
-    @param file_name: The path to the out file
-    @return: True if the save was successful, Flase o.w.
-    """
-
-    def shortest_path_a(self, src, dest):
+    def shortest_path_list(self, src, dest):
         groupNodes = self.myGraph._nodes  # get and store the graphs' collection of vertices.
         parents = {}  # for (space I guess.. wanted to achieve time) complexity reason-
+        # a hashmap of parents, to restore the parent of each node in the shortest path
         myListg = []  # create a list for returning the shortest path.
+        #     groupNodes[i.getKey()] = i  # for every key in the nodes list put it in the hashmap with its key.
+
         desty = dest  # for further use
 
         if (dest == src):  # the path of node from itself to itself is itself.
-            myListg.add(groupNodes.get(src))
+            myListg.append(groupNodes.get(src))
             return myListg
 
         if src not in groupNodes.keys() or dest not in groupNodes.keys():
-            #   if (!groupNodes.containsKey(src)||!groupNodes.containsKey(dest)):
-            # if one of them doesn't exist there's no path
-            #         System.out.println("someone doesnt exist")
             return myListg
 
         groupNodesKeys = groupNodes.keys()
         for key in groupNodesKeys:  # initializing- prepearing the nodes for the proccess.
             (groupNodes.get(key)).setTagB(float('inf'))
-            (groupNodes.get(key)).setInfo("")
-
+            groupNodes.get(key).setInfo("")
             # Shortest distance- we set it to infinity cuz we didn't check it yet
             parents[key] = None  # None because initially, we don't have any path to reach
 
@@ -111,7 +117,6 @@ class GraphAlgo(GraphAlgoInterface):
         while q:  # while it's not empty
             for node in q:  # getting the smallest dist node
                 # node is type NodeData
-                # System.out.println("key is"+node.getKey())
                 if node.getTagB() <= minDist:
                     minDist = node.getTagB()
                     minKey = node.getKey()
@@ -119,9 +124,9 @@ class GraphAlgo(GraphAlgoInterface):
 
             q.remove(minNode)
             # for every neighbor of minKey= neinode
-            # print("luli", self.myGraph)
             if (self.myGraph.all_out_edges_of_node(minKey)):
-                for key in self.myGraph.all_out_edges_of_node(minKey).keys():  # where v has not yet been removed from Q.
+                for key in self.myGraph.all_out_edges_of_node(
+                        minKey).keys():  # where v has not yet been removed from Q.
                     # edge is type edge_data
                     # get node data from edge_data
                     neinode = self.myGraph._nodes.get(key)  # (NodeData) #typed NodeData
@@ -129,10 +134,8 @@ class GraphAlgo(GraphAlgoInterface):
                     # which is the DEST in the edge between MINKEY and DEST.
                     if (neinode in q):  # where v has not yet been removed from Q.#if it contains the neighbor node
                         dist = minDist + self.myGraph.all_out_edges_of_node(minKey).get(key)
-                        # getEdge(minKey, neinode.getKey()).getWeight()  # alt = dist[u] + dist_between(u, v) #check
                         if (dist < neinode.getTagB()):
                             (neinode).setTagB(dist)  # it's the path's weight sum, why is it double? #(NodeData)
-                            # because it's requested like that. TO GO THROUGH LATER
                             neinode.setInfo(str(minKey))
 
             minDist = float('inf')
@@ -143,10 +146,11 @@ class GraphAlgo(GraphAlgoInterface):
             # typed NodeData
             # means you haven't yet reached the src because only the src has tag=0 (dist)
             # of 0 from itself.
+            # myListg.append(groupNodes.get(desty))
             myListg.append(groupNodes.get(desty))
             desty = int(groupNodes.get(desty).getInfo())  # get the "father"
-
-        myListg.append(groupNodes.get(src))
+        # myListg.append(groupNodes.get(src)) <<list of nodes
+        myListg.append(groupNodes.get(src))  # list of nodes id
         myListg.reverse()  # reverse the list, 'cuz it came reversed, as we got from the dest to src by parents.
         if myListg[len(myListg) - 1].getKey() != dest:
             myListg.clear()
@@ -155,55 +159,40 @@ class GraphAlgo(GraphAlgoInterface):
 
         """     returns the shortest path between src to dest - as an ordered List of nodes"""
 
-    def shortest_path_dist(self, src: int, dest: int):
-        print("Comutes one shortesetPathDist")
+    def shortest_path_dist(self, src, dest):
         if (src == dest):  # the distance from a node to itself is 0.
-            print("b")
             return 0
-        aj = self.shortest_path_a(src, dest)  # aj is type List
+
+        aj = self.shortest_path_list(src, dest)  # aj is type List
         if not (aj):
-            print("a")
-            return -1  # EMPTY aj MEANS THERE'S NO PATH FROM SRC TO DEST
+            return float('inf')  # EMPTY aj MEANS THERE'S NO PATH FROM SRC TO DEST
+
         weight = (aj.pop(len(aj) - 1)).getTagB()
         return weight  # with -1 cuz of the edges num, if there are 2 nodes, theres only one edge connecting them
+
         """returns the length of the shortest path between src to dest"""
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        nodesList = self.shortest_path_a(id1, id2)
+        nodesList = self.shortest_path_list(id1, id2)
+        # print("nodes",nodesList)
+        nodesKeys = []
+        for node in nodesList:
+            nodesKeys.append(node.key)
+        # print("keys ",nodesKeys)
         dist = self.shortest_path_dist(id1, id2)
-        return dist, nodesList
-
-    def reverse_graph(self, graph: DiGraph) -> DiGraph:
-        reversedGraph = DiGraph()
-        NodeData.counter = 0
-        for nd in graph.get_all_v():  # Reverse the original graph
-            nodeToCopy = graph.get_all_v().get(nd)
-            reversedGraph.add_node(nd, nodeToCopy.pos)  # add the nodes to the new graph
-        for nd in graph.get_all_v():  # Reverse the original graph
-            if graph.all_out_edges_of_node(nd):
-                for key in graph.all_out_edges_of_node(nd).keys():
-                    src = nd
-                    dest = key
-                    weight = graph.all_out_edges_of_node(nd).get(key)
-                    reversedGraph.add_edge(dest, src, weight)
-        return reversedGraph
+        return dist, nodesKeys
 
     """
-    https://www.cs.huji.ac.il/course/2005/dast/slides/lect14.pdf
-    https://cs.stackexchange.com/questions/57495/how-do-we-generate-a-depth-first-forest-from-the-depth-first-search
-    SCC algorithm implementation, used pseudocode
+    Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
+    @param id1: The start node id
+    @param id2: The end node id
+    @return: The distance of the path, a list of the nodes ids that the path goes through
     """
 
     def connected_component(self, id1: int) -> list:
-        compList = []
-        for nodeKey in self.myGraph.get_all_v().keys():
-            if nodeKey != id1:
-                if self.shortest_path_dist(id1, nodeKey) != -1:
-                    if self.shortest_path_dist(nodeKey, id1) != -1:
-                        compList.append(self.myGraph.get_all_v().get(nodeKey))
-        compList.append(self.myGraph.get_all_v().get(id1))
-        return compList
-
+        if self.get_graph() is None or id1 not in self.get_graph().get_all_v().keys():
+            return []
+        return self.bfs(self.get_graph(), id1, {})
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
         @param id1: The node id
@@ -211,25 +200,93 @@ class GraphAlgo(GraphAlgoInterface):
         """
 
     def connected_components(self) -> List[list]:
-        allCompsList = []
-        for nodeKey in self.myGraph.get_all_v().keys():  # for every node(key)
-            isThere = 0
-            if (allCompsList):
-                for alist in allCompsList:  # for every list
-                    if self.myGraph.get_all_v().get(nodeKey) in alist:
-                        # if there's a list containing this node
-                        isThere = 1
-                        break
-            if isThere == 0:  # then it's not in any list
-                newList = self.connected_component(nodeKey)
-                allCompsList.append(newList)
-        return allCompsList
+        if self.get_graph() is None or self.get_graph().v_size() == 0:
+            return []
+        all_the_SCC = []
+        has_family = {}
+        for key in self.get_graph().get_all_v():
+            if key not in has_family.keys():
+                all_the_SCC.append(self.bfs(self.get_graph(), key, has_family))
+        return all_the_SCC
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
 
+    def bfs(self, g: DiGraph(), id1: int, has_family: dict) -> list:
+        scc = []
+        queue = deque()
+        v_list = g.get_all_v()
+        u = v_list.get(id1)
+        family_nodes = {}
+        scanned = {}
+        queue.append(u)
+        scc.append(u.key)
+        has_family[u.key] = True
+        scanned[u] = True
+        while queue:
+            u = queue.popleft()
+            if u.key in g._edges.keys():
+                for key in g.all_out_edges_of_node(u.key).keys():
+                    v = g.get_all_v().get(key)
+                    if v not in scanned:
+                        scanned[v] = True
+                        family_nodes[v.key] = True
+                        queue.append(v)
+        queue.append(g.get_all_v().get(id1))
+        scanned.clear()
+        while queue:
+            u = queue.popleft()
+            if g.all_in_edges_of_node(u.key) is not None:
+                for key in g.all_in_edges_of_node(u.key).keys():
+                    v = g.get_all_v().get(key)
+                    if v not in scanned:
+                        scanned[v] = True
+                        queue.append(v)
+                        if key in family_nodes.keys() and key not in scc:
+                            scc.append(key)
+                            has_family[key] = True
+        return sorted(list(dict.fromkeys(scc)))
+
+    """BFS algorithm: this method operates BFS twice: one for the original graph, and the
+    second time for reverse graph. After this time we get SCC for specific node"""
+
     def plot_graph(self) -> None:
+        fig, axes = plt.subplots(figsize=(8, 6))
+        csfont = {'fontname': 'Comic Sans MS'}
+        axes.set_title("Graph Plot", **csfont, fontsize=25)
+        fig.patch.set_facecolor('xkcd:lavender')
+        axes.set_facecolor('xkcd:lightblue')
+        for node in self.myGraph._nodes.values():
+            circle = plt.Circle((node.pos[0], node.pos[1]), radius=1, facecolor='magenta', edgecolor='purple')
+            axes.add_patch(circle)
+            label = axes.annotate(str(node.key), xy=(node.pos[0], node.pos[1]), fontsize=10, ha="center")
+
+        for src in self.myGraph._edges.keys():
+            for dest in self.myGraph._edges.get(src).keys():
+                x1 = self.myGraph._nodes.get(src).pos[0]
+                y1 = self.myGraph._nodes.get(src).pos[1]
+                x2 = self.myGraph._nodes.get(dest).pos[0]
+                y2 = self.myGraph._nodes.get(dest).pos[1]
+
+                if (self.myGraph._edges.get(dest)):  #if there's a chance for a two directional edge..
+                    if (self.myGraph._edges.get(dest).get(src)):  # if there's a two- directional edge
+                        srcNode = self.myGraph._nodes.get(src)
+                        destNode = self.myGraph._nodes.get(dest)
+                        plt.annotate("", xy=(destNode.pos[0], destNode.pos[1]), xytext=(srcNode.pos[0], srcNode.pos[1]),
+                                     arrowprops=dict(arrowstyle='<->'), horizontalalignment="center", color='b')
+                    else:
+                         # there's only a one directed edge
+                        plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
+                else:         # there's only a one directed edge
+                    plt.arrow(x1, y1, (x2) - (x1), (y2) - (y1), head_width=0.7, width=0.1, ec='white')
+        white_patch = mpatches.Patch(color='white', label='(one)Directed edge')
+        black_patch = mpatches.Patch(color='black', label='Bidirected edge')
+        magenta_patch = mpatches.Patch(color='magenta', label='Node')
+        plt.legend(handles=[black_patch, white_patch, magenta_patch])
+        axes.relim()
+        axes.autoscale_view()
+        plt.show()
         """
         Plots the graph.
         If the nodes have a position, the nodes will be placed there.
