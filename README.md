@@ -6,7 +6,7 @@ B.S.D
 
 ## Project - Weighted and undirected graph model - 01/2021 
 
-![a](https://github.com/Dvir-Segal/Ex3Oop/blob/master/pics/graph%20plot.png)
+![a](https://github.com/Dvir-Segal/Ex3Oop/blob/master/pics/graph%20plot1.png)
 
 The project implements a Weighted and directed graph model, using data structures including HashMaps to represent the nodes and neighborhood relationships between them. 
 
