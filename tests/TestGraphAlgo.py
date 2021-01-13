@@ -181,16 +181,14 @@ class MyTestCase(unittest.TestCase):
         6. check if nodes 6, 8 have same SCC"""
 
         print("List of all the SCC's in connected :" + str(self.algo.connected_components()))
-        #self.algo.__init__(self.scc_graph)
-        # self.algo.load_from_json("G_30000_240000_1.json")
-        # self.algo.connected_components()
-        #self.algo.plot_graph()
-        #print("List of all the SCC's in scc_graph :" + str(self.algo.connected_components()))
-        #print("The SCC of node 0: " + str(self.algo.connected_component(0)))
-        # print("The SCC of node 4: " + str(self.algo.connected_component(4)))
-        # print("The SCC of node 3: " + str(self.algo.connected_component(3)))
-        # self.assertEqual(4, len(self.algo.connected_components()))
-        # self.assertTrue(True, self.algo.connected_component(6) == self.algo.connected_component(8))
+        self.algo.__init__(self.scc_graph)
+        self.algo.plot_graph()
+        print("List of all the SCC's in scc_graph :" + str(self.algo.connected_components()))
+        print("The SCC of node 0: " + str(self.algo.connected_component(0)))
+        print("The SCC of node 4: " + str(self.algo.connected_component(4)))
+        print("The SCC of node 3: " + str(self.algo.connected_component(3)))
+        self.assertEqual(4, len(self.algo.connected_components()))
+        self.assertTrue(True, self.algo.connected_component(6) == self.algo.connected_component(8))
 
 
     def test_shortestPathCompare1(self):
@@ -204,15 +202,11 @@ class MyTestCase(unittest.TestCase):
         for src in self.algo.get_graph()._edges.keys():
             for dest in self.algo.get_graph().all_out_edges_of_node(src).keys():
                 graphnx1.add_edge(src, dest, weight= self.algo.get_graph().all_out_edges_of_node(src).get(dest))
-        # for src in self.algo.myGraph._nodes.keys():
-        #     for dest in self.algo.myGraph._edges.get(src).keys():
-        #         graphnx1.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
         self.startTime = time.time()
         print("shortestPath is ", self.algo.shortest_path(0, 4))
         print("Networx: ")
         print(single_source_dijkstra(graphnx1, 0, 4))
         self.assertEqual(graphnx1.number_of_nodes(), self.algo.myGraph.v_size())
-     #   self.assertEqual(graphnx1.number_of_edges(), self.algo.myGraph.e_size()) <<problem here
 
     def test_shortestPathCompare2(self):
         """Runs the shortestPath method from this project's algo, and runs it also through
@@ -231,75 +225,76 @@ class MyTestCase(unittest.TestCase):
         print(self.algo.shortest_path(0, 4))
         print(single_source_dijkstra(graphnx2, 0, 4))
 
-    # def test_shortestPathCompare3(self):
-    #     """Runs the shortestPath method from this project's algo, and runs it also through
-    #     netWorkX, to compare results and performance. runs on graph: G_1000_8000_1.json """
-    #
-    #     print("reading from file...", self.algo.load_from_json("G_1000_8000_1.json"))
-    #     graphnx3 = nx.DiGraph()
-    #     for nodeKey in self.algo.myGraph._nodes.keys():
-    #         graphnx3.add_node(nodeKey)
-    #     for src in self.algo.myGraph._edges.keys():
-    #         for dest in self.algo.myGraph._edges.get(src).keys():
-    #             graphnx3.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
-    #     self.startTime = time.time()
-    #     print("shortestPath is ", self.algo.shortest_path(0, 4))
-    #     print("Networx: ")
-    #     print(single_source_dijkstra(graphnx3, 0, 4))
-    #
-    #
-    # def test_shortestPathCompare4(self):
-    #     """Runs the shortestPath method from this project's algo, and runs it also through
-    #     netWorkX, to compare results and performance. runs on graph:  G_10000_80000_1.json """
-    #
-    #     print("reading from file...", self.algo.load_from_json("G_10000_80000_1.json"))
-    #     graphnx4 = nx.DiGraph()
-    #     for nodeKey in self.algo.myGraph._nodes.keys():
-    #         graphnx4.add_node(nodeKey)
-    #     for src in self.algo.myGraph._edges.keys():
-    #         for dest in self.algo.myGraph._edges.get(src).keys():
-    #             graphnx4.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
-    #     self.startTime = time.time()
-    #     print("shortestPath is ", self.algo.shortest_path(0, 4))
-    #     print("Networx: ")
-    #     print(single_source_dijkstra(graphnx4, 0 , 4))
-    #
-    #
-    # def test_shortestPathCompare5(self):
-    #     """Runs the shortestPath method from this project's algo, and runs it also through
-    #     netWorkX, to compare results and performance. runs on graph: G_20000_160000_1.json """
-    #
-    #     print("reading from file...", self.algo.load_from_json("G_20000_160000_1.json"))
-    #     graphnx5 = nx.DiGraph()
-    #     for nodeKey in self.algo.myGraph._nodes.keys():
-    #         graphnx5.add_node(nodeKey)
-    #     for src in self.algo.myGraph._edges.keys():
-    #         for dest in self.algo.myGraph._edges.get(src).keys():
-    #             graphnx5.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
-    #     self.startTime = time.time()
-    #     print("shortestPath is ", self.algo.shortest_path(0, 4))
-    #     print("Networx: ")
-    #     print(single_source_dijkstra(graphnx5, 0, 4))
-    #
-    #
-    # def test_shortestPathCompare6(self):
-    #     """Runs the shortestPath method from this project's algo, and runs it also through
-    #     netWorkX, to compare results and performance. runs on graph: G_30000_240000_1.json """
-    #
-    #     print("reading from file...", self.algo.load_from_json("G_30000_240000_1.json"))
-    #     graphnx6 = nx.DiGraph()
-    #     for nodeKey in self.algo.myGraph._nodes.keys():
-    #         graphnx6.add_node(nodeKey)
-    #     for src in self.algo.myGraph._edges.keys():
-    #         for dest in self.algo.myGraph._edges.get(src).keys():
-    #             graphnx6.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
-    #     self.startTime = time.time()
-    #     print("shortestPath is ", self.algo.shortest_path(0, 4))
-    #     print("Networx: ")
-    #     print(single_source_dijkstra(graphnx6, 0, 4))
 
+    def test_shortestPathCompare3(self):
+        """Runs the shortestPath method from this project's algo, and runs it also through
+        netWorkX, to compare results and performance. runs on graph: G_1000_8000_1.json """
+
+        print("reading from file...", self.algo.load_from_json("G_1000_8000_1.json"))
+        graphnx3 = nx.DiGraph()
+        for nodeKey in self.algo.myGraph._nodes.keys():
+            graphnx3.add_node(nodeKey)
+        for src in self.algo.myGraph._edges.keys():
+            for dest in self.algo.myGraph._edges.get(src).keys():
+                graphnx3.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
+        self.startTime = time.time()
+        print("shortestPath is ", self.algo.shortest_path(0, 4))
+        print("Networx: ")
+        print(single_source_dijkstra(graphnx3, 0, 4))
+
+
+
+
+    def test_shortestPathCompare4(self):
+        """Runs the shortestPath method from this project's algo, and runs it also through
+        netWorkX, to compare results and performance. runs on graph:  G_10000_80000_1.json """
+
+        print("reading from file...", self.algo.load_from_json("G_10000_80000_1.json"))
+        graphnx4 = nx.DiGraph()
+        for nodeKey in self.algo.myGraph._nodes.keys():
+            graphnx4.add_node(nodeKey)
+        for src in self.algo.myGraph._edges.keys():
+            for dest in self.algo.myGraph._edges.get(src).keys():
+                graphnx4.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
+        self.startTime = time.time()
+        print("shortestPath is ", self.algo.shortest_path(0, 4))
+        print("Networx: ")
+        print(single_source_dijkstra(graphnx4, 0 , 4))
+
+
+
+    def test_shortestPathCompare5(self):
+        """Runs the shortestPath method from this project's algo, and runs it also through
+        netWorkX, to compare results and performance. runs on graph: G_20000_160000_1.json """
+
+        print("reading from file...", self.algo.load_from_json("G_20000_160000_1.json"))
+        graphnx5 = nx.DiGraph()
+        for nodeKey in self.algo.myGraph._nodes.keys():
+            graphnx5.add_node(nodeKey)
+        for src in self.algo.myGraph._edges.keys():
+            for dest in self.algo.myGraph._edges.get(src).keys():
+                graphnx5.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
+        self.startTime = time.time()
+        print("shortestPath is ", self.algo.shortest_path(0, 4))
+        print("Networx: ")
+        print(single_source_dijkstra(graphnx5, 0, 4))
+
+
+    def test_shortestPathCompare6(self):
+        """Runs the shortestPath method from this project's algo, and runs it also through
+        netWorkX, to compare results and performance. runs on graph: G_30000_240000_1.json """
+
+        print("reading from file...", self.algo.load_from_json("G_30000_240000_1.json"))
+        graphnx6 = nx.DiGraph()
+        for nodeKey in self.algo.myGraph._nodes.keys():
+            graphnx6.add_node(nodeKey)
+        for src in self.algo.myGraph._edges.keys():
+            for dest in self.algo.myGraph._edges.get(src).keys():
+                graphnx6.add_edge(src, dest, weight= self.algo.myGraph._edges.get(src).get(dest))
+        self.startTime = time.time()
+        print("shortestPath is ", self.algo.shortest_path(0, 4))
+        print("Networx: ")
+        print(single_source_dijkstra(graphnx6, 0, 4))
 
 if __name__ == '__main__':
     unittest.main()
-    # suite = unittest.TestLoader().loadTestsFromTestCase(MyTestCase)
-    # unittest.TextTestRunner(verbosity=0).run(suite)

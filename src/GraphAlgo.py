@@ -218,8 +218,7 @@ class GraphAlgo(GraphAlgoInterface):
         queue = deque()
         v_list = g.get_all_v()
         u = v_list.get(id1)
-        family_nodes = {}
-        scanned = {}
+        scanned, scanned_reverse = {}, {}
         queue.append(u)
         scc.append(u.key)
         has_family[u.key] = True
@@ -231,19 +230,17 @@ class GraphAlgo(GraphAlgoInterface):
                     v = g.get_all_v().get(key)
                     if v not in scanned:
                         scanned[v] = True
-                        family_nodes[v.key] = True
                         queue.append(v)
         queue.append(g.get_all_v().get(id1))
-        scanned.clear()
         while queue:
             u = queue.popleft()
             if g.all_in_edges_of_node(u.key) is not None:
                 for key in g.all_in_edges_of_node(u.key).keys():
                     v = g.get_all_v().get(key)
-                    if v not in scanned:
-                        scanned[v] = True
+                    if v not in scanned_reverse:
+                        scanned_reverse[v] = True
                         queue.append(v)
-                        if key in family_nodes.keys() and key not in scc:
+                        if v in scanned.keys() and key not in has_family.keys():
                             scc.append(key)
                             has_family[key] = True
         return sorted(list(dict.fromkeys(scc)))
@@ -274,11 +271,12 @@ class GraphAlgo(GraphAlgoInterface):
                         plt.annotate("", xy=(destNode.pos[0], destNode.pos[1]), xytext=(srcNode.pos[0], srcNode.pos[1]),
                                      arrowprops=dict(arrowstyle='<->', color='black'))
                     else:
-                        #There's only a one directed edge
-                        plt.annotate("", xy=(x1, y1), xytext=(x2, y2),
-                                     arrowprops=dict(arrowstyle='->'), color='blue')
+                        # There's only a one directed edge
+                        plt.annotate("", xy=(x2, y2), xytext=(x1, y1),
+                                     arrowprops=dict(arrowstyle='->', color='blue'))
                 else:  # there's only a one directed edge
-                    plt.annotate("", xy= (x1, y1), xytext=(x2, y2), arrowprops=dict(arrowstyle='->', color='blue'))
+                    plt.annotate("", xy=(x2, y2), xytext=(x1, y1),
+                                 arrowprops=dict(arrowstyle='->', color='blue'))
 
         white_patch = mpatches.Patch(color='blue', label='(one)Directed edge')
         black_patch = mpatches.Patch(color='black', label='Bidirected edge')
@@ -293,3 +291,4 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+
