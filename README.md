@@ -8,7 +8,9 @@ B.S.D
 
 ![a](https://github.com/Dvir-Segal/Ex3Oop/blob/master/pics/graph%20plot1.png)
 
-The project implements a Weighted and directed graph model, using data structures including HashMaps to represent the nodes and neighborhood relationships between them. 
+The project implements a Weighted and directed graph model. 
+The graph contains a data structure of a dictionary in a dictionary: the keys in the external dict are sources nodes keys,
+Every value is a pair (tuple) of (dest: weight), of an edge.
 
 ## Don't miss our rich documents!! In this projects DOCS directory.
 ## Has this graphs whole functions described.
@@ -25,14 +27,13 @@ The project implements a Weighted and directed graph model, using data structure
 * RemoveEdge(node_data src, node_data dest)- Removing neighbors to nodes in the graph- meaning creating an edge between two nodes, starting from the src node to the dest node
 * Receiving the neighbors of a particular junction
 * setInfo()- Adding information to the nodes themselves, in two information values ("variables") for each node
-* connected componnent(x) - returns the SCC of node x
+* connected componnent(x) - returns the SCC of the node x
 * connected_componnents() - returns al the SCC componnets in the graph
-* all_out_edges_of_node(x) - returns all the dests of x
-* all_in_edges_of_node(x) - returns all the srcs of x
+* all_out_edges_of_node(x) - returns all the dests of the node x
+* all_in_edges_of_node(x) - returns all the srcs of the node x
 * copy()- Deep copy of a graph
 * load_from_json()-  Loads a graph from a json file (within a specific structure. id defined in "How to use?".)
 
-The graph contains dict in dict: the keys in the external dict are srcs. Every value is pair of (dest: weight), for an edge.
 
 Tests of this graph include:
 
