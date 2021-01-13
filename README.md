@@ -15,7 +15,7 @@ The project implements a Weighted and directed graph model, using data structure
 
 **This project's weighted directed graph functions include:**
 
-* save()- Saving the graph into a file
+* save_to_json- Saving the graph into a file of json
 * load()- Loading a graph from a file
 * shortestPath()- Find the lighted (the minimal weight of edges) path between two nodes using Dijkstra's algorithm, implemented by a queue
 * shortestPathDist()- Returning the shortest path's between two nodes weight
@@ -25,9 +25,14 @@ The project implements a Weighted and directed graph model, using data structure
 * RemoveEdge(node_data src, node_data dest)- Removing neighbors to nodes in the graph- meaning creating an edge between two nodes, starting from the src node to the dest node
 * Receiving the neighbors of a particular junction
 * setInfo()- Adding information to the nodes themselves, in two information values ("variables") for each node
-* isConnected()- Checking the connectivity of the graph, is it a connected graph or not.
+* connected componnent(x) - returns the SCC of node x
+* connected_componnents() - returns al the SCC componnets in the graph
+* all_out_edges_of_node(x) - returns all the dests of x
+* all_in_edges_of_node(x) - returns all the srcs of x
 * copy()- Deep copy of a graph
 * load_from_json()-  Loads a graph from a json file (within a specific structure. id defined in "How to use?".)
+
+The graph contains dict in dict: the keys in the external dict are srcs. Every value is pair of (dest: weight), for an edge.
 
 Tests of this graph include:
 
