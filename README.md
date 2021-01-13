@@ -12,8 +12,7 @@ The project implements a Weighted and directed graph model.
 The graph contains a data structure of a dictionary in a dictionary: the keys in the external dict are sources nodes keys,
 Every value is a pair (tuple) of (dest: weight), of an edge.
 
-## Don't miss our rich documents!! In this projects DOCS directory.
-## Has this graphs whole functions described.
+## Don't miss our rich documentary! in " ... | pydocs" pages here in the Wiki. 
 
 **This project's weighted directed graph functions include:**
 
